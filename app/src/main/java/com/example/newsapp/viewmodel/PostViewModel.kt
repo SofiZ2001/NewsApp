@@ -11,8 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PostViewModel @Inject constructor(private val getPostsUseCase: GetPostUseCase) :
-    ViewModel() {
+class PostViewModel @Inject constructor(
+    private val getPostsUseCase: GetPostUseCase
+) : ViewModel() {
     private val _postState = MutableStateFlow<PostState>(PostState.Idle)
     val postState: StateFlow<PostState> = _postState
 
@@ -26,9 +27,7 @@ class PostViewModel @Inject constructor(private val getPostsUseCase: GetPostUseC
                 PostState.Success(posts)
             },
             onFailure = {
-                PostState.Error(
-                    "Hubo un problema"
-                )
+                PostState.Error
             }
         )
     }
@@ -42,6 +41,6 @@ class PostViewModel @Inject constructor(private val getPostsUseCase: GetPostUseC
     sealed class PostState {
         data object Idle : PostState()
         data class Success(val posts: List<PostModel>) : PostState()
-        data class Error(val message: String) : PostState()
+        data object Error : PostState()
     }
 }

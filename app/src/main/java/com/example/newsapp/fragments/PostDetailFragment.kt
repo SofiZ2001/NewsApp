@@ -6,22 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import com.example.newsapp.fragments.PostListFragment.Companion.POST_DATA_CONTENT
+import com.example.newsapp.fragments.PostListFragment.Companion.POST_DATA_TITLE
 import com.example.newsapp.ui.screen.PostDetailScreen
-import com.example.newsapp.viewmodel.PostData
 
 class PostDetailFragment : Fragment() {
-    private lateinit var post: PostData
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        post = arguments?.getParcelable("POST_DATA") ?: throw IllegalArgumentException("")
+        val title = arguments?.getString(POST_DATA_TITLE) ?: EMPTY
+        val content = arguments?.getString(POST_DATA_CONTENT) ?: EMPTY
         return ComposeView(requireContext()).apply {
             setContent {
-                PostDetailScreen(post)
+                PostDetailScreen(title, content)
             }
         }
+    }
+
+    companion object {
+        private const val EMPTY = ""
     }
 }

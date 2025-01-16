@@ -11,8 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(private val getUsersUseCase: GetUsersUseCase) :
-    ViewModel() {
+class UserViewModel @Inject constructor(
+    private val getUsersUseCase: GetUsersUseCase
+) : ViewModel() {
     private val _userState = MutableStateFlow<UserState>(UserState.Idle)
     val userState: StateFlow<UserState> = _userState
 
@@ -22,9 +23,7 @@ class UserViewModel @Inject constructor(private val getUsersUseCase: GetUsersUse
             _userState.value = response.fold(
                 onSuccess = { users -> UserState.Success(users) },
                 onFailure = {
-                    UserState.Error(
-                        "Hubo un problema"
-                    )
+                    UserState.Error
                 }
             )
         }
@@ -33,6 +32,6 @@ class UserViewModel @Inject constructor(private val getUsersUseCase: GetUsersUse
     sealed class UserState {
         data object Idle : UserState()
         data class Success(val users: List<UserModel>) : UserState()
-        data class Error(val message: String) : UserState()
+        data object Error : UserState()
     }
 }

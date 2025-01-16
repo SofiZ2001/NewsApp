@@ -58,7 +58,7 @@ class NewsRepositoryTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when repository get posts then fails`() = runTest {
-        coEvery { newsApi.getPosts() } throws RuntimeException("API error")
+        coEvery { newsApi.getPosts() } throws RuntimeException(SERVICE_ERROR_MESSAGE)
 
         val result = newsRepository.getPosts()
 
@@ -69,11 +69,15 @@ class NewsRepositoryTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when repository get users then fails`() = runTest {
-        coEvery { newsApi.getUsers() } throws RuntimeException("API error")
+        coEvery { newsApi.getUsers() } throws RuntimeException(SERVICE_ERROR_MESSAGE)
 
         val result = newsRepository.getUsers()
 
         assertThat(result.isFailure).isTrue()
         assert(result.exceptionOrNull() is RuntimeException)
+    }
+
+    companion object {
+        private const val SERVICE_ERROR_MESSAGE = "API error"
     }
 }

@@ -82,7 +82,7 @@ class UserViewModelTest {
         }
         advanceUntilIdle()
 
-        assertThat(lastState).isEqualTo(Error("Hubo un problema"))
+        assertThat(lastState).isEqualTo(Error)
         job.cancel()
     }
 

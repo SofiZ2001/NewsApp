@@ -13,7 +13,6 @@ import androidx.fragment.app.viewModels
 import com.example.newsapp.activity.MapActivity
 import com.example.newsapp.ui.screen.UserListScreen
 import com.example.newsapp.viewmodel.UserViewModel
-import com.example.newsapp.viewmodel.UserViewModel.UserState.Success
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,10 +28,7 @@ class UserListFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val userState by viewModel.userState.collectAsState()
-                if (userState is Success) {
-                    val users = (userState as Success).users
-                    UserListScreen(users, ::goToMap)
-                }
+                UserListScreen(userState, ::goToMap)
             }
         }
     }
@@ -44,10 +40,14 @@ class UserListFragment : Fragment() {
 
     private fun goToMap(lat: Double, lng: Double) {
         val intent = Intent(requireContext(), MapActivity::class.java).apply {
-            putExtra("latitude", lat)
-            putExtra("longitude", lng)
+            putExtra(LATITUDE, lat)
+            putExtra(LONGITUDE, lng)
         }
-       startActivity(intent)
+        startActivity(intent)
     }
 
+    companion object {
+        const val LATITUDE = "LATITUDE"
+        const val LONGITUDE = "LONGITUDE"
+    }
 }

@@ -72,7 +72,7 @@ class PostViewModelTest {
     @Test
     fun `when viewmodel get posts then fails`() = runTest(testDispatcher) {
         lateinit var lastState: PostState
-        coEvery { useCase.invoke() } returns Result.failure(Throwable())
+        coEvery { useCase.invoke() } returns Result.failure(Exception())
 
         viewModel.getPosts()
 
@@ -83,7 +83,7 @@ class PostViewModelTest {
         }
         advanceUntilIdle()
 
-        assertThat(lastState).isEqualTo(Error(ERROR_MESSAGE))
+        assertThat(lastState).isEqualTo(Error)
         job.cancel()
     }
 
@@ -139,10 +139,7 @@ class PostViewModelTest {
         private const val SECOND_TITLE = "SECOND_TITLE"
         private const val FIRST = "FIRST"
         private const val THIRD = "THIRD"
-        private const val ERROR_MESSAGE = "Hubo un problema"
         private const val ONE = 1
         private const val ZERO = 0
-
     }
-
 }

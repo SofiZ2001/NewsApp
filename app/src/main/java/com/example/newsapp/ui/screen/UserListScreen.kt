@@ -2,6 +2,7 @@ package com.example.newsapp.ui.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,38 +19,59 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.UserModel
 import com.example.newsapp.R
 import com.example.newsapp.ui.common.TopBarApp
+import com.example.newsapp.ui.theme.DarkBlue
+import com.example.newsapp.viewmodel.UserViewModel.UserState
+import com.example.newsapp.viewmodel.UserViewModel.UserState.Error
+import com.example.newsapp.viewmodel.UserViewModel.UserState.Idle
+import com.example.newsapp.viewmodel.UserViewModel.UserState.Success
 
 @Composable
 fun UserListScreen(
-    users: List<UserModel> = emptyList(),
+    state: UserState,
     onMapClick: (lat: Double, lng: Double) -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { TopBarApp(showUserBtn = false) },
+        topBar = { TopBarApp() },
         content = { paddingValues ->
-            LazyColumn(
-                Modifier
-                    .padding(paddingValues)
-                    .fillMaxWidth()
-            ) {
-                items(users) { user ->
-                    with(user.address.geo) {
-                        UserCard(user) {
-                            onMapClick(
-                                lat.toDouble(),
-                                lng.toDouble()
-                            )
+            Box(Modifier.padding(paddingValues)) {
+                when (state) {
+                    is Success -> {
+                        val users = state.users
+                        LazyColumn(
+                            Modifier
+                                .fillMaxWidth()
+                        ) {
+                            items(users) { user ->
+                                with(user.address.geo) {
+                                    UserCard(user) {
+                                        onMapClick(
+                                            lat.toDouble(),
+                                            lng.toDouble()
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
+
+                    is Idle -> Text(
+                        text = stringResource(R.string.service_loading_data),
+                        textAlign = TextAlign.Center
+                    )
+
+                    is Error -> Text(
+                        text = stringResource(R.string.service_error_message),
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
@@ -74,7 +96,7 @@ fun UserCard(user: UserModel, onMapClick: () -> Unit) {
                 Icon(
                     modifier = Modifier.size(48.dp),
                     painter = painterResource(id = R.drawable.ic_user),
-                    tint = Color.White,
+                    tint = DarkBlue,
                     contentDescription = "",
                 )
                 Column(modifier = Modifier.padding(horizontal = 4.dp)) {
@@ -96,14 +118,12 @@ fun UserCard(user: UserModel, onMapClick: () -> Unit) {
                 modifier = Modifier
                     .size(24.dp)
                     .clickable {
-                        onMapClick(
-                        )
+                        onMapClick()
                     },
                 painter = painterResource(id = R.drawable.ic_map),
-                tint = Color.White,
+                tint = DarkBlue,
                 contentDescription = ""
             )
         }
     }
-
 }

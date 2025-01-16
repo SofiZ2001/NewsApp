@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">NewsApp</string>
+    <string name="menu_title">Bienvenido a \nNewsApp</string>
+    <string name="menu_post_button_text">Ir a Noticias</string>
+    <string name="menu_user_button_text">Ir a Usuarios</string>
+    <string name="post_list_search_post_text">Busca una noticia</string>
+    <string name="service_loading_data">Espera unos segundos, estamos cargando la información</string>
+    <string name="service_error_message">¡Ups! Ocurrió un problema</string>
 </resources>

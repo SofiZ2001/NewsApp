@@ -9,14 +9,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.domain.model.PostModel
 import com.example.newsapp.R
 import com.example.newsapp.ui.screen.PostListScreen
 import com.example.newsapp.viewmodel.PostViewModel
-import com.example.newsapp.viewmodel.PostViewModel.PostState.Success
-import com.example.newsapp.viewmodel.PostData
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,14 +27,10 @@ class PostListFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val postState by viewModel.postState.collectAsState()
-                if (postState is Success) {
-                    val posts = (postState as Success).posts
-                    PostListScreen(
-                        posts,
-                        ::goToPostDetail,
-                        ::goToUserList,
-                        onSearchPost = { inputText -> viewModel.filterPost(inputText) })
-                }
+                PostListScreen(
+                    postState,
+                    onPostClick = ::goToPostDetail,
+                    onSearchPost = { inputText -> viewModel.filterPost(inputText) })
             }
         }
     }
@@ -51,15 +44,14 @@ class PostListFragment : Fragment() {
         findNavController().navigate(
             R.id.action_postList_to_postDetail,
             Bundle().apply {
-                putParcelable(
-                    "POST_DATA",
-                    PostData(postSelected.title, postSelected.content)
-                )
+                putString(POST_DATA_TITLE, postSelected.title)
+                putString(POST_DATA_CONTENT, postSelected.content)
             }
         )
     }
 
-    private fun goToUserList() {
-        findNavController().navigate(R.id.action_postList_to_userList)
+    companion object {
+        const val POST_DATA_TITLE = "POST_DATA_TITLE"
+        const val POST_DATA_CONTENT = "POST_DATA_CONTENT"
     }
 }
