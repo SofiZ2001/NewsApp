@@ -3,12 +3,11 @@
 Una aplicación de noticias que permite visualizar una lista de noticias, filtrarlos por título, listar usuarios y explorar su ubicación en el mapa.
 
 ## 📋 Tabla de Contenidos
-1. [Descripción General](#descripción-general)
-2. [Estructura del Proyecto](#estructura-del-proyecto)
-3. [Tecnologías Utilizadas](#tecnologías-utilizadas)
-4. [Pruebas Unitarias](#pruebas-unitarias)
-5. [Futuras Mejoras](#futuras-mejoras)
-
+1. **Descripción General**
+2. **Estructura del Proyecto**
+3. **Tecnologías Utilizadas**
+4. **Pruebas Unitarias**
+5. **Futuras Mejoras**
 
 ## 📖 Descripción General
 
